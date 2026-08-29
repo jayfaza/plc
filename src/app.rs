@@ -1,5 +1,7 @@
+use std::path::PathBuf;
 use std::process::Termination;
 
+use crate::config::Config;
 use crate::errors::{ExecutionError, PathDoesNotExists, PathIsNotADirectory};
 use crate::utils::calonicalize;
 use error_stack::{Report, ResultExt};
@@ -16,6 +18,13 @@ pub struct App {}
 impl App {
     pub fn run() -> Result<(), Report<ExecutionError>> {
         let mut directory = Args::parse().project;
+        let config = PathBuf::from(tilde("~/.config/plc/").to_string());
+
+        if !config.exists() {
+            Config::new()
+                .create_default_config()
+                .change_context(ExecutionError)?;
+        }
 
         directory = tilde(&directory).to_string();
 

@@ -71,3 +71,58 @@ impl fmt::Display for PathIsNotADirectory {
 }
 
 impl Error for PathIsNotADirectory {}
+
+#[derive(Debug)]
+pub struct ConfigReadError;
+
+impl fmt::Display for ConfigReadError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str("failed to read config.toml")
+    }
+}
+
+impl Error for ConfigReadError {}
+
+#[derive(Debug)]
+pub struct ConfigParseError;
+
+impl fmt::Display for ConfigParseError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str("failed to parse config.toml")
+    }
+}
+
+impl Error for ConfigParseError {}
+
+#[derive(Debug)]
+pub struct CouldNotCreateConfig;
+
+impl fmt::Display for CouldNotCreateConfig {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str("failed to parse config.toml")
+    }
+}
+
+impl Error for CouldNotCreateConfig {}
+
+#[derive(Debug)]
+pub struct CouldNotWriteConfig;
+
+impl fmt::Display for CouldNotWriteConfig {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str("failed to parse config.toml")
+    }
+}
+
+impl Error for CouldNotWriteConfig {}
+
+#[derive(Debug)]
+pub struct CouldNotLoadConfig;
+
+impl fmt::Display for CouldNotLoadConfig {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str("failed to parse config.toml")
+    }
+}
+
+impl Error for CouldNotLoadConfig {}
