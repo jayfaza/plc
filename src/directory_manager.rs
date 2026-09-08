@@ -7,7 +7,7 @@ pub struct DirectoryManager {}
 
 impl DirectoryManager {
     pub fn new() -> DirectoryManager {
-        return DirectoryManager {};
+        DirectoryManager {}
     }
 
     pub fn collect_paths(

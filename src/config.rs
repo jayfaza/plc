@@ -1,12 +1,13 @@
-use crate::errors::{
-    ConfigParseError, ConfigReadError, CouldNotCreateConfig, CouldNotLoadConfig,
-    CouldNotWriteConfig,
-};
 use crate::utils::calonicalize;
 use error_stack::{Report, ResultExt};
 use serde::{Deserialize, Serialize};
 use shellexpand::tilde;
 use std::fs::read_to_string;
+
+use crate::errors::{
+    ConfigParseError, ConfigReadError, CouldNotCreateConfig, CouldNotLoadConfig,
+    CouldNotWriteConfig,
+};
 
 #[derive(Deserialize, Serialize)]
 pub struct ConfigToml {
@@ -20,13 +21,13 @@ impl Config {
         Self {}
     }
     fn read_from_path(&self, path: &str) -> Result<String, Report<ConfigReadError>> {
-        Ok(read_to_string(path).change_context(ConfigReadError)?)
+        read_to_string(path).change_context(ConfigReadError)
     }
 
     fn parse_config(&self, config_string: String) -> Result<ConfigToml, Report<ConfigParseError>> {
-        Ok(toml::from_str(config_string.as_str())
+        toml::from_str(config_string.as_str())
             .attach("failed to parse config")
-            .change_context(ConfigParseError)?)
+            .change_context(ConfigParseError)
     }
 
     pub fn load_config(&self) -> Result<ConfigToml, Report<CouldNotLoadConfig>> {
@@ -37,14 +38,13 @@ impl Config {
             )
             .attach("failed to load plc.toml")
             .change_context(CouldNotLoadConfig)?;
-        Ok(self
-            .parse_config(raw_config)
-            .change_context(CouldNotLoadConfig)?)
+        self.parse_config(raw_config)
+            .change_context(CouldNotLoadConfig)
     }
 
     fn create_config(&self) -> Result<(), Report<CouldNotCreateConfig>> {
         let configs_dir =
-            &calonicalize(&tilde("~/.config").to_string()).change_context(CouldNotCreateConfig)?;
+            &calonicalize(tilde("~/.config").as_ref()).change_context(CouldNotCreateConfig)?;
         let dir_path_str = &format!("{}/plc", configs_dir);
         let file_path_str = &format!("{}/plc.toml", dir_path_str);
 
@@ -72,9 +72,9 @@ impl Config {
         let configs_dir = &calonicalize(&tilde("~/.config")).change_context(CouldNotWriteConfig)?;
         let config_file = calonicalize(&format!("{}/plc/plc.toml", configs_dir))
             .change_context(CouldNotWriteConfig)?;
-        Ok(std::fs::write(config_file, data)
-            .attach_with(|| format!("failed to write to plc.toml"))
-            .change_context(CouldNotWriteConfig)?)
+        std::fs::write(config_file, data)
+            .attach_with(|| "failed to write to plc.toml".to_string())
+            .change_context(CouldNotWriteConfig)
     }
 
     fn default_config_entry(&self) -> String {

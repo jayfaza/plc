@@ -1,7 +1,7 @@
+use error_stack::{Report, ResultExt};
 use std::fs;
 
 use crate::errors::LinesCountError;
-use error_stack::{Report, ResultExt};
 
 pub struct LinesCounter {
     pub lines: i32,

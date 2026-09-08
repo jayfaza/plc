@@ -1,17 +1,16 @@
+use clap::Parser;
+use error_stack::{Report, ResultExt};
+use shellexpand::tilde;
 use std::path::PathBuf;
 use std::process::Termination;
 
 use crate::config::Config;
-use crate::errors::{ExecutionError, PathDoesNotExists, PathIsNotADirectory};
-use crate::utils::calonicalize;
-use error_stack::{Report, ResultExt};
-
-use clap::Parser;
-
 use crate::directory_manager::DirectoryManager;
 use crate::lines_couter::LinesCounter;
 use crate::parser::Args;
-use shellexpand::tilde;
+use crate::utils::calonicalize;
+
+use crate::errors::{ExecutionError, PathDoesNotExists, PathIsNotADirectory};
 
 pub struct App {}
 
@@ -54,7 +53,7 @@ impl App {
                 .report();
         });
 
-        println!("{} lines in {}", lines_counter.lines, &directory);
+        println!("{} lines in {}", lines_counter.lines, directory);
         Ok(())
     }
 }
